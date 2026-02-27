@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import identity, business, verification, auth, external, documents, admin
+from routers import identity, business, verification, auth, external, documents, admin, bank
 import os
 from dotenv import load_dotenv
 from database import engine, Base
-from models.database_models import AadhaarProfile, PANProfile, GSTCompany, CompanyOwner, Invoice, GSTReturn, OTPLog, VerificationLog, AuditLog, ExternalConsumer
+from models.database_models import AadhaarProfile, PANProfile, GSTCompany, CompanyOwner, Invoice, GSTReturn, OTPLog, VerificationLog, AuditLog, ExternalConsumer, EscrowAccount
 
 load_dotenv()
 
@@ -19,7 +19,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://frontend-eta-indol-gwwegxnsme.vercel.app",
+        "http://localhost:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,6 +35,7 @@ app.include_router(business.router, prefix="/business", tags=["Business & GST"])
 app.include_router(verification.router, prefix="/verification", tags=["Master Verification"])
 app.include_router(external.router, prefix="/external", tags=["External API Consumers"])
 app.include_router(documents.router, prefix="/documents", tags=["Document Generation"])
+app.include_router(bank.router, prefix="/bank", tags=["Bank & Escrow"])
 
 @app.get("/")
 def read_root():
