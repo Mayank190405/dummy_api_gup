@@ -20,10 +20,11 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://frontend-eta-indol-gwwegxnsme.vercel.app",          # Production alias
-        "https://frontend-3j5ugl6fk-growbizz2005-4367s-projects.vercel.app",  # Latest deploy
         "http://localhost:3000",
+        "http://localhost:3001",
     ],
+    # Matches ALL Vercel preview & production URLs for this project — no updates needed for new deploys
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
